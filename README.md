@@ -20,7 +20,7 @@ Deve ser possivel movimentar o estoque dos produtos, lembrando que **não é per
 
 Sua tarefa é desenvolver uma API capaz de cumprir os requisitos especificados.
 
-A especificação da API está disponível no nosso git no formato Swagger 2.0, e pode ser visualizado utilizando o Swagger.
+A especificação da API está [disponível nesse repositório](/api-spec.yaml) no formato Swagger 2.0, e pode ser visualizado utilizando o Swagger.
 Você pode abri-la no [Swagger Editor](https://editor.swagger.io) ou utilizar a [a imagem do docker](https://hub.docker.com/r/swaggerapi/swagger-editor/) para rodar local.
 
 ## Instruções
