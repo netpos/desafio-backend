@@ -2,10 +2,10 @@
 
 ## Problema
 
-A NetPOS fornece uma aplicação para que empresários consigam ter uma visão clara do seu negócio e como otimizar suas vendas e lucros. 
+A NetPOS fornece uma aplicação para que empresários consigam ter uma visão clara do seu negócio e ajudar otimizar suas vendas e lucros. 
 Para completar essa missão iremos construir uma aplicação para que esses empresários cadastrem seus produtos e gerencie seu estoque.
 
-O processo começa com a criação de um Usuário (UserAccount), os campos de nome, e-mail e Senha são obrigatórios, sendo **o e-mail é um campo único** para identificar o empresário.
+O processo começa com a criação de um Usuário (UserAccount), os campos de nome, e-mail e senha são obrigatórios, sendo **o e-mail um campo único** para identificar o empresário.
 
 O sistema deve ser capaz de listar os usuários e trazer informações detalhadas de um usuário. 
 Deve ser possível filtrar os resultados pelo nome. 
@@ -24,8 +24,8 @@ A especificação da API está [disponível nesse repositório](/api-spec.yaml) 
 Você pode abri-la no [Swagger Editor](https://editor.swagger.io) ou utilizar a [a imagem do docker](https://hub.docker.com/r/swaggerapi/swagger-editor/) para rodar local.
 
 ## Instruções
-Para ajudar e evitar perda de tempo, segue uam estrutura básica para o desenvolvimento da sua solução utilizando a plataforma Java (Spring Boot).
-**Dica: Indicamos que você use o banco de dados H2, se utilizar alguma outra solução de banco e for necessário enviar o script para criação da estrutura.**
+Para ajudar e evitar perda de tempo, segue uma estrutura básica para o desenvolvimento da sua solução utilizando a plataforma Java (Spring Boot).
+**Dica: Indicamos que você use o banco de dados H2, se utilizar alguma outra solução de banco (Mysql, MongoDB, etc) e for necessário enviar o script para criação da estrutura.**
 
 ## Avaliação
 A avaliação será constituída de duas etapas principais: Correção objetiva e qualitativa.
