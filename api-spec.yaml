@@ -1,0 +1,401 @@
+swagger: '2.0'
+info:
+  description: API Cadastro de Contas e Gestão de Produtos
+  version: 1.0.0
+  title: Serviço de Cadastro de Contas e Produtos
+  contact:
+    name: NetPOS
+    url: 'https://www.smartpos.net.br'
+    email: vagas@netpos.com.br
+host: 'localhost:8000'
+basePath: /
+tags:
+  - name: User Accounts
+    description: Criação de Contas
+  - name: Products
+    description: Criação e gestão de produtos
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Listar produtos com ordenação e filtro
+      consumes:
+        - application/json;charset=UTF-8
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: header
+          name: user_id
+          description: ID de usuário
+          type: string
+          required: true
+        - name: filter
+          in: query
+          description: Inicio do nome ou código do produto para aplicar o filtro
+          required: false
+          type: string
+        - name: order
+          in: query
+          description: Campo a ser ordenado (code, name, price) e tipo de ordenação (crescente ou decrescente)
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+        '422':
+          description: Erro de validação nos campos
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+    post:
+      tags:
+        - Products
+      summary: Cria um novo produto para um user account
+      consumes:
+        - application/json;charset=UTF-8
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: header
+          name: user_id
+          description: ID de usuário
+          type: string
+          required: true
+        - in: body
+          name: request
+          description: Payload Create product
+          required: true
+          schema:
+            $ref: '#/definitions/ProductCreateRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Product'
+        '201':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Product'
+        '422':
+          description: Erro de validação nos campos
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+  '/products/{product_id}':
+    put:
+      tags:
+        - Products
+      summary: Altera um produto
+      consumes:
+        - application/json;charset=UTF-8
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: header
+          name: user_id
+          description: ID de usuário
+          type: string
+          required: true
+        - name: product_id
+          in: path
+          description: Product ID
+          required: true
+          type: string
+        - in: body
+          name: request
+          description: Payload Create product
+          required: true
+          schema:
+            $ref: '#/definitions/ProductUpdateRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Product'
+        '404':
+          description: Produto não encontrado
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+    delete:
+      tags:
+        - Products
+      summary: Deleta um produto (não deleta fisicamente)
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: header
+          name: user_id
+          description: ID de usuário
+          type: string
+          required: true
+        - name: product_id
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Produto não encontrado
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+    get:
+      tags:
+        - Products
+      summary: Retorna os detalhes de um produto
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: header
+          name: user_id
+          description: ID de usuário
+          type: string
+          required: true
+        - name: product_id
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Product'
+        '404':
+          description: Produto não encontrado
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+  '/products/{product_id}/stock':
+    post:
+      tags:
+        - Products
+      summary:
+        'Realiza uma operação de entrada ou saida de estoque de determinado produto'
+      produces:
+        - application/json;charset=UTF-8
+      consumes:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: header
+          name: user_id
+          description: ID de usuário
+          type: string
+          required: true
+        - name: product_id
+          in: path
+          description: Product ID
+          required: true
+          type: string
+        - in: body
+          name: request
+          description: Payload para movimentação de estoque do produto
+          required: true
+          schema:
+            $ref: '#/definitions/ProductStockUpdate'
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Produto não encontrado
+          schema:
+            $ref: '#/definitions/GenericError'
+        '422':
+          description: Falha na validação dos dados
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+  /users:
+    get:
+      tags:
+        - User Accounts
+      summary: 'Listagem de usuários. Beve listar os usuários ordenados pelo nome e filtra-los caso seja informado algum filtro.'
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - name: q
+          in: query
+          description: Inicio do nome para aplicar o filtro
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Ok
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserAccount'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+    post:
+      tags:
+        - User Accounts
+      summary: Cria um novo usuário.
+      consumes:
+        - application/json;charset=UTF-8
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/CreateUserAccountRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UserAccount'
+        '201':
+          description: Ok
+          schema:
+            $ref: '#/definitions/UserAccount'
+        '422':
+          description: Erro de validação nos campos
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+  '/users/{user_id}':
+    get:
+      tags:
+        - User Accounts
+      summary: Retorna os dados de um usuário.
+      consumes:
+        - application/json;charset=UTF-8
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - name: user_id
+          in: path
+          description: Id do usuário
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/UserAccountDTO'
+        '404':
+          description: Usuário não encontrado
+          schema:
+            $ref: '#/definitions/GenericError'
+        '500':
+          description: Erro interno do servidor
+          schema:
+            $ref: '#/definitions/GenericError'
+definitions:
+  GenericError:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    title: GenericError
+  CreateUserAccountRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      password:
+        type: string
+  UserAccountDTO:
+    type: object
+    properties:
+      id:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+  UserAccount:
+    type: object
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      password:
+        type: string
+  Product:
+    type: object
+    properties:
+      id:
+        type: string
+      code:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      "stock": {
+        "$ref": "#/definitions/Stock"
+      }
+  Stock:
+    type: object
+    properties:
+      quantity:
+        type: number
+  ProductCreateRequest:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      "stock": {
+        "$ref": "#/definitions/Stock"
+      }
+  ProductUpdateRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      price:
+        type: number
+  ProductStockUpdate:
+    type: object
+    properties:
+      operation:
+        type: string
+        enum: [ADD, REMOVE, SET]
+      quantity:
+        type: number
