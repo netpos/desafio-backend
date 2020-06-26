@@ -7,7 +7,7 @@ info:
     name: NetPOS
     url: 'https://www.smartpos.net.br'
     email: vagas@netpos.com.br
-host: 'localhost:8000'
+host: 'localhost:8080'
 basePath: /
 tags:
   - name: User Accounts
